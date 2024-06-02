@@ -1,0 +1,11 @@
+= Invoice Generator API
+
+== Contributing
+
+=== Database / Model
+
+In order to upgrade the database schema, the schema defined in prisma/schema.prisma needs to be updated.
+
+To update the generated model for code usage, execute `npx prisma generate`. When you are finished and ready for a
+commit, use `npx prisma migrate dev --name <migration-name>` in order to create a migration sql script and execute it
+on your local database.
