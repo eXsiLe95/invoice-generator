@@ -1,36 +1,36 @@
 {
-	"name": "invoice-generator-api",
-	"version": "0.0.0",
-	"description": "API for invoice generator",
-	"main": "src/index.ts",
-	"scripts": {
-		"build": "tsc",
-		"start": "node dist/index.js",
-		"start:dev": "tsx watch src/index.ts",
-		"lint": "eslint --ignore-path .eslintignore --ext .ts .",
+  "name": "invoice-generator-api",
+  "version": "0.0.0",
+  "description": "API for invoice generator",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "start:dev": "tsx watch src/index.ts",
+    "lint": "eslint --ignore-path .eslintignore --ext .ts .",
 		"format": "prettier --ignore-path .prettierignore --write \"**/*.+(ts|json)\"",
 		"test": "vitest run --watch=false",
-		"test:coverage": "vitest run --coverage --watch=false"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/eXsiLe95/invoice-generator.git"
-	},
-	"keywords": [
-		"TypeScript",
-		"Express"
-	],
-	"author": "Apostolos Vassiliou, Lukas Kimpel",
-	"license": "MIT",
-	"bugs": {
-		"url": "https://github.com/eXsiLe95/invoice-generator/issues"
-	},
-	"homepage": "https://github.com/eXsiLe95/invoice-generator#readme",
-	"devDependencies": {
-		"@tsconfig/node22": "^22.0.0",
-		"@types/express": "^4.17.21",
-		"@types/node": "^20.13.0",
-		"@types/supertest": "^6.0.2",
+    "test:coverage": "vitest run --coverage --watch=false"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eXsiLe95/invoice-generator.git"
+  },
+  "keywords": [
+    "TypeScript",
+    "Express"
+  ],
+  "author": "Apostolos Vassiliou, Lukas Kimpel",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/eXsiLe95/invoice-generator/issues"
+  },
+  "homepage": "https://github.com/eXsiLe95/invoice-generator#readme",
+  "devDependencies": {
+    "@tsconfig/node22": "^22.0.0",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.13.0",
+    "@types/supertest": "^6.0.2",
 		"@typescript-eslint/eslint-plugin": "^7.11.0",
 		"@typescript-eslint/parser": "^7.11.0",
 		"@vitest/coverage-v8": "^1.6.0",
