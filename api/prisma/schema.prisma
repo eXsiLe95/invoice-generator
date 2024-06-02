@@ -103,6 +103,7 @@ model Project {
   updatedAt DateTime @updatedAt
 
   active    Boolean   @default(true)
+
   repeat    String    @default("")
   positions Fee[]
   invoices  Invoice[]
