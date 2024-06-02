@@ -49,7 +49,38 @@ export const authRouter: Router = (() => {
 	});
 
 	router.post('/login', async (req, res) => {
+		const user: Partial<User> = req.body;
 
+		const {email, password} = user;
+
+		if (!email || !password) {
+			return res.status(400).json({
+				status: 400,
+				message: "email and password are mandatory",
+			});
+		}
+
+		try {
+
+			const foundUser = await database.user.findFirst({
+				where: {email},
+			});
+
+			if (!foundUser || !await bcrypt.compare(password, foundUser.password)) {
+				return res.status(401).json({
+					status: 401,
+					message: "email and password do not match",
+				});
+			}
+
+			res.status(200).json({
+				...foundUser,
+				password: undefined,
+			});
+		} catch (e) {
+			console.error(e);
+			return res.status(500).send();
+		}
 	});
 
 	router.get('/me', async (req, res) => {
