@@ -2,6 +2,8 @@ import express, {Request, Response, Router} from "express";
 import database from "../database";
 import {User} from "@prisma/client";
 import bcrypt from "bcrypt";
+import {auth, CustomRequest} from "../middleware/auth.middleware";
+import jwt from "jsonwebtoken";
 
 export const authRouter: Router = (() => {
 	const router = express.Router();
@@ -48,7 +50,7 @@ export const authRouter: Router = (() => {
 		}
 	});
 
-	router.post('/login', async (req, res) => {
+	router.post('/login', async (req: Request, res: Response) => {
 		const user: Partial<User> = req.body;
 
 		const {email, password} = user;
@@ -76,6 +78,7 @@ export const authRouter: Router = (() => {
 			res.status(200).json({
 				...foundUser,
 				password: undefined,
+				token: jwt.sign({ id: foundUser.id.toString() }, process.env.JWT_SECRET as string || "invoice-generator")
 			});
 		} catch (e) {
 			console.error(e);
@@ -83,11 +86,11 @@ export const authRouter: Router = (() => {
 		}
 	});
 
-	router.get('/me', async (req, res) => {
-		res.send(database.user.findMany())
+	router.get('/me', auth, async (req: CustomRequest, res: Response) => {
+		res.send(req.user);
 	});
 
-	router.post('/logout', async (req, res) => {
+	router.post('/logout', auth, async (req: CustomRequest, res: Response) => {
 
 	});
 

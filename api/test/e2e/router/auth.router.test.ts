@@ -204,9 +204,17 @@ describe('API Test /auth', () => {
 			body: JSON.stringify({email, password})
 		});
 		expect(loginResponse.status).toEqual(200);
+		const logineResponseBody = await loginResponse.json();
+		expect(logineResponseBody.token).toMatch(/./g);
+		const token = logineResponseBody.token;
 
 		// When
-		const response = await fetch('http://localhost:3000/auth/me');
+		const response = await fetch('http://localhost:3000/auth/me',
+			{
+				headers: {
+					Authorization: `Bearer ${token}`,
+				}
+			});
 
 		// Then
 		expect(response.status).toEqual(200);
@@ -223,9 +231,21 @@ describe('API Test /auth', () => {
 
 		// Then
 		expect(response.status).toEqual(401);
-		const responseBody = await response.json();
-		expect(responseBody.email).toEqual(email);
-		expect(responseBody.password).toBeUndefined();
+	});
+
+	test('/me: fails to show user data when token invalid', async () => {
+		// Given
+		const invalidToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRlYWM5YzQxLWI3M2UtNGJiZi05MDQyLTg2ZDBjY2I5MGUxNiIsImlhdCI6MTcxNzM1MzQzMH0.XD1bRn5AD-Lzl6_8jrNVsfIEUQkP1E7B8jXoPF-XFu0';
+
+		// When
+		const response = await fetch('http://localhost:3000/auth/me', {
+			headers: {
+				Authorization: `Bearer ${invalidToken}`,
+			}
+		});
+
+		// Then
+		expect(response.status).toEqual(401);
 	});
 
 	afterEach(async () => {
