@@ -186,6 +186,48 @@ describe('API Test /auth', () => {
 		expect(responseBody.message).toEqual("email and password do not match");
 	});
 
+	test('/me: shows user data when logged in', async () => {
+		// Given
+		const user = await database.user.create({
+			data: {
+				email,
+				password: await bcrypt.hash(password, 10)
+			}
+		});
+		expect(user).toBeDefined();
+		expect(user.email).toEqual(email);
+		const loginResponse = await fetch('http://localhost:3000/auth/login', {
+			method: 'POST',
+			headers: {
+				'content-type': 'application/json',
+			},
+			body: JSON.stringify({email, password})
+		});
+		expect(loginResponse.status).toEqual(200);
+
+		// When
+		const response = await fetch('http://localhost:3000/auth/me');
+
+		// Then
+		expect(response.status).toEqual(200);
+		const responseBody = await response.json();
+		expect(responseBody.email).toEqual(email);
+		expect(responseBody.password).toBeUndefined();
+	});
+
+	test('/me: fails to show user data when not logged in', async () => {
+		// Given
+
+		// When
+		const response = await fetch('http://localhost:3000/auth/me');
+
+		// Then
+		expect(response.status).toEqual(401);
+		const responseBody = await response.json();
+		expect(responseBody.email).toEqual(email);
+		expect(responseBody.password).toBeUndefined();
+	});
+
 	afterEach(async () => {
 		await database.user.deleteMany();
 	})
