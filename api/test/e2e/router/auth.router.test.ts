@@ -248,6 +248,63 @@ describe('API Test /auth', () => {
 		expect(response.status).toEqual(401);
 	});
 
+	test('/logout: logs out authenticated user', async () => {
+		// Given
+		const user = await database.user.create({
+			data: {
+				email,
+				password: await bcrypt.hash(password, 10)
+			}
+		});
+		expect(user).toBeDefined();
+		expect(user.email).toEqual(email);
+		const loginResponse = await fetch('http://localhost:3000/auth/login', {
+			method: 'POST',
+			headers: {
+				'content-type': 'application/json',
+			},
+			body: JSON.stringify({email, password})
+		});
+		expect(loginResponse.status).toEqual(200);
+		const logineResponseBody = await loginResponse.json();
+		expect(logineResponseBody.token).toMatch(/./g);
+		const token = logineResponseBody.token;
+		const meResponse = await fetch('http://localhost:3000/auth/me',
+			{
+				headers: {
+					Authorization: `Bearer ${token}`,
+				}
+			});
+		expect(meResponse.status).toEqual(200);
+		const meResponseBody = await meResponse.json();
+		expect(meResponseBody.email).toEqual(email);
+		expect(meResponseBody.password).toBeUndefined();
+
+		// When
+		const response = await fetch('http://localhost:3000/auth/logout', {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${token}`,
+			}
+		});
+
+		// Then
+		expect(response.status).toEqual(200);
+		const meResponseAfterLogout = await fetch('http://localhost:3000/auth/me',
+			{
+				headers: {
+					Authorization: `Bearer ${token}`,
+				}
+			});
+		expect(meResponseAfterLogout.status).toEqual(401);
+		const meResponseAfterLogoutBody = await meResponseAfterLogout.json();
+		expect(meResponseAfterLogoutBody.status).toBe(401);
+		expect(meResponseAfterLogoutBody.message).toBe("Unauthorized");
+		const userAfterLogout = await database.user.findFirst({});
+		expect(userAfterLogout).toBeDefined();
+		expect(userAfterLogout.token).toBeNull();
+	});
+
 	afterEach(async () => {
 		await database.user.deleteMany();
 	})
