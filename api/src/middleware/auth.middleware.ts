@@ -25,7 +25,7 @@ export const auth = async (req: CustomRequest, res: Response, next: NextFunction
 		const user = await database.user.findFirst({
 			where: {
 				id: decodedToken.id,
-				// token: token
+				token: token
 			}
 		});
 

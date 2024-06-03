@@ -102,7 +102,16 @@ export const authRouter: Router = (() => {
 	});
 
 	router.post('/logout', auth, async (req: CustomRequest, res: Response) => {
+		await database.user.update({
+			where: {
+				id: req.user!.id
+			},
+			data: {
+				token: null
+			}
+		});
 
+		res.status(200).send();
 	});
 
 	return router;
