@@ -75,10 +75,21 @@ export const authRouter: Router = (() => {
 				});
 			}
 
+			const token = jwt.sign({ id: foundUser.id.toString() }, process.env.JWT_SECRET as string || "invoice-generator");
+
+			await database.user.update({
+				where: {
+					email
+				},
+				data: {
+					token
+				}
+			})
+
 			res.status(200).json({
 				...foundUser,
 				password: undefined,
-				token: jwt.sign({ id: foundUser.id.toString() }, process.env.JWT_SECRET as string || "invoice-generator")
+				token
 			});
 		} catch (e) {
 			console.error(e);

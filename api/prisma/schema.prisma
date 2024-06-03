@@ -20,6 +20,7 @@ model User {
 
   email    String @unique
   password String
+  token    String?
 
   contactInformation   ContactInformation? @relation(fields: [contactInformationId], references: [id])
   contactInformationId String?             @unique
