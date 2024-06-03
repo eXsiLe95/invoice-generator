@@ -26,6 +26,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+        cache-dependency-path: 'api/package-lock.json'
     - run: npm ci
       working-directory: ./app
     - run: npm run build --if-present
@@ -47,6 +48,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+        cache-dependency-path: 'api/package-lock.json'
     - run: npm ci
       working-directory: ./app
     - run: npm run lint --if-present
@@ -69,6 +71,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+        cache-dependency-path: 'api/package-lock.json'
     - run: npm ci
       working-directory: ./app
     - run: npm run test --if-present
