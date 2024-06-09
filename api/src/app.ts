@@ -9,10 +9,6 @@ app.get('/', (req: Request, res: Response) => {
 	res.send('Hello world');
 });
 
-app.get('/', (req: Request, res: Response) => {
-	res.send('Hello world');
-});
-
 app.use('/auth', authRouter);
 
 export default app;
