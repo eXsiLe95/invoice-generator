@@ -6,6 +6,10 @@
 
 In order to upgrade the database schema, the schema defined in prisma/schema.prisma needs to be updated.
 
-To update the generated model for code usage, execute `npx prisma generate`. When you are finished and ready for a
+To update the generated model for code usage, execute `npx prisma generate`. In order to update the database with the
+schema from the prisma schema file, you can use `npx prisma db push`. If you have made changes to the database directly
+and want them to be reflected in your schema file, use `npx prisma db pull`.
+
+When you are finished and ready for a
 commit, use `npx prisma migrate dev --name <migration-name>` in order to create a migration sql script and execute it
 on your local database.
