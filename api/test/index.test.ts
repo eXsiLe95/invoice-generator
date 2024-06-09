@@ -1,6 +1,5 @@
 import { describe, expect, test } from 'vitest';
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-import request = require('supertest');
+import request from 'supertest';
 import app from '../src/app';
 
 describe('API Test', () => {
