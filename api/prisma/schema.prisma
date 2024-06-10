@@ -1,0 +1,150 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  email    String @unique
+  password String
+
+  contactInformation   ContactInformation? @relation(fields: [contactInformationId], references: [id])
+  contactInformationId String?             @unique
+
+  customers      Customer[]
+  invoiceCounter InvoiceCounter?
+}
+
+model Customer {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  contactInformation   ContactInformation @relation(fields: [contactInformationId], references: [id])
+  contactInformationId String             @unique
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+}
+
+model ContactInformation {
+  id          String    @id @default(uuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  user        User?
+  customer    Customer?
+  salutation  String
+  name        String
+  companyName String
+  address     Address?
+  bank        Bank?
+  tax         Tax?
+  phone       String
+  mobile      String
+  email       String
+  website     String
+}
+
+model Tax {
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  contactInformation   ContactInformation @relation(fields: [contactInformationId], references: [id])
+  contactInformationId String             @unique
+
+  id String
+  fa String
+}
+
+model Address {
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  contactInformation   ContactInformation @relation(fields: [contactInformationId], references: [id])
+  contactInformationId String             @unique
+
+  street String
+  zip    String
+  city   String
+}
+
+model Bank {
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  contactInformation   ContactInformation @relation(fields: [contactInformationId], references: [id])
+  contactInformationId String             @unique
+
+  name String
+
+  iban String?
+  bic  String?
+
+  account String?
+  blz     String?
+}
+
+model Project {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  active    Boolean   @default(true)
+  repeat    String    @default("")
+  positions Fee[]
+  invoices  Invoice[]
+}
+
+model Fee {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  project   Project @relation(fields: [projectId], references: [id])
+  projectId String
+
+  name     String
+  amount   Float
+  quantity Float
+  unit     PositionUnit
+}
+
+enum PositionUnit {
+  HOUR
+  ITEM
+}
+
+model Invoice {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  project   Project @relation(fields: [projectId], references: [id])
+  projectId String
+
+  date           DateTime
+  number         String
+  payDate        DateTime
+  text           String
+  additionalText String
+}
+
+model InvoiceCounter {
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
+
+  counter Int
+}
