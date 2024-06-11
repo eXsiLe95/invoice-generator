@@ -28,7 +28,9 @@
 	"homepage": "https://github.com/eXsiLe95/invoice-generator#readme",
 	"devDependencies": {
 		"@tsconfig/node22": "^22.0.0",
+		"@types/bcrypt": "^5.0.2",
 		"@types/express": "^4.17.21",
+		"@types/jsonwebtoken": "^9.0.6",
 		"@types/node": "^20.13.0",
 		"@types/supertest": "^6.0.2",
 		"@typescript-eslint/eslint-plugin": "^7.11.0",
@@ -38,15 +40,17 @@
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-node": "^11.1.0",
 		"prettier": "^3.3.0",
-	    "prisma": "^5.14.0",
+	    "prisma": "^5.15.0",
 		"supertest": "^7.0.0",
 		"tsx": "^4.11.0",
 		"typescript": "^5.4.5",
 		"vitest": "^1.6.0"
 	},
 	"dependencies": {
-		"@prisma/client": "^5.14.0",
+		"@prisma/client": "^5.15.0",
+		"bcrypt": "^5.1.1",
 		"dotenv": "^16.4.5",
-		"express": "^4.19.2"
+		"express": "^4.19.2",
+		"jsonwebtoken": "^9.0.2"
 	}
 }
